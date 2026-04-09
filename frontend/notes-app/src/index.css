@@ -5,7 +5,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
+@layer base{ /* This is like the template word style we use for the website */
 
     html {
 
