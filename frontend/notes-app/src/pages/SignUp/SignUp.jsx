@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import PasswordInput from '../../components/Input/PasswordInput';
+import { Link } from 'react-router-dom';
+import { validateEmail } from '../../utils/helper';
 
 
 const SignUp = () => {
@@ -12,6 +14,26 @@ const SignUp = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+
+
+        if (!name) {
+          setError("Please enter your name");
+          return;
+        }
+    
+        if (!validateEmail(email)) {
+          setError("Please enter a valid email address. ");
+          return;
+        }
+
+        if (!password) {
+          setError("Please enter the password");
+          return;
+        }
+
+        setError("")
+        
+        // SignUp API Call
   };
 
   return (
@@ -43,6 +65,20 @@ const SignUp = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
+            {/* this set the error message in red*/}
+            {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
+
+            <button type="submit" className="btn-primary">
+              Create Account
+            </button>
+
+            <p className="text-sm text-center mt-4">
+              Already have an account?{" "}
+              <Link to="/Login" className="font-medium text-primary underline">
+                Login
+              </Link>
+            </p>
 
           </form>
         </div>

@@ -52,6 +52,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             
             />
+
             {/* this set the error message in red*/}
             {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
             
@@ -61,7 +62,7 @@ const Login = () => {
 
             <p className="text-sm text-center mt-4">
               Not registered yet?{" "}
-              <Link to="SignUp" className="font-medium text-primary underline">
+              <Link to="/SignUp" className="font-medium text-primary underline">
                 Create an Account
               </Link>
             </p>
