@@ -6,7 +6,7 @@ import { validateEmail } from '../../utils/helper';
 
 const Login = () => {
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(""); // this is called array destructuring
   const [password, setPassword] = useState("");
   const[error, setError] = useState(null);
 
