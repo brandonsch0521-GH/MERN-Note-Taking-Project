@@ -1,39 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import Navbar from '../../components/Navbar/Navbar';
 import PasswordInput from '../../components/Input/PasswordInput';
 import { Link } from 'react-router-dom';
 import { validateEmail } from '../../utils/helper';
-
+import axiosInstance from '../../utils/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState(null)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
 
+    if (!name) {
+      setError("Please enter your name.");
+      return;
+    }
 
-        if (!name) {
-          setError("Please enter your name");
-          return;
-        }
-    
-        if (!validateEmail(email)) {
-          setError("Please enter a valid email address. ");
-          return;
-        }
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
 
-        if (!password) {
-          setError("Please enter the password");
-          return;
-        }
+    if (!password) {
+      setError("Please enter the password.");
+      return;
+    }
 
-        setError("")
-        
-        // SignUp API Call
+    setError("")
+
+    //SignUp API Call
+    try {
+      const response = await axiosInstance.post("/create-account", {
+        fullName: name,
+        email: email,
+        password: password,
+      });
+
+      // Handle successful register response
+      if (response.data && response.data.error) {
+        setError(response.data.message);
+        return;
+      }
+      if (response.data && response.data.accessToken) {
+        localStorage.setItem("token", response.data.accessToken);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
+    }
   };
 
   return (
@@ -66,7 +91,6 @@ const SignUp = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            {/* this set the error message in red*/}
             {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
 
             <button type="submit" className="btn-primary">
@@ -75,7 +99,7 @@ const SignUp = () => {
 
             <p className="text-sm text-center mt-4">
               Already have an account?{" "}
-              <Link to="/Login" className="font-medium text-primary underline">
+              <Link to="/login" className="fon-medium text-primary underline">
                 Login
               </Link>
             </p>
@@ -87,4 +111,4 @@ const SignUp = () => {
   )
 }
 
-export default SignUp;
+export default SignUp
