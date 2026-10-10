@@ -1,93 +1,196 @@
-# MERN Basics
+# MERN Note-Taking App
 
+A full-stack note-taking web application built with the **MERN stack** (MongoDB, Express.js, React, and Node.js). Users can create an account, sign in, and manage their own notes through a simple dashboard. The project demonstrates REST API development, MongoDB persistence, JWT-based authentication, and a React frontend.
 
+## Features
 
-## Getting started
+- **Account registration and login** using JSON Web Tokens (JWT)
+- **Personal note management:** create, view, edit, and delete notes
+- **Tags:** assign multiple tags to notes
+- **Pinning:** mark important notes as pinned
+- **Search:** find notes by title or content (case-insensitive)
+- **Dashboard:** display notes associated with the signed-in user
+- **Interface feedback:** note-editing modal, empty states, and toast messages
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Tech Stack
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+| Layer | Technologies |
+| --- | --- |
+| Frontend | React 19, React Router, Vite, Tailwind CSS |
+| API client | Axios |
+| Backend | Node.js, Express.js |
+| Database | MongoDB, Mongoose |
+| Authentication | JSON Web Tokens (`jsonwebtoken`) |
+| Other UI libraries | React Modal, React Icons, Moment.js |
 
-## Add your files
+## Project Structure
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
+```text
+mern-basics/
+├── Backend/
+│   ├── index.js                 # Express server and REST API routes
+│   ├── utilities.js             # JWT authentication middleware
+│   ├── models/
+│   │   ├── note.model.js        # Note schema
+│   │   └── user.model.js        # User schema
+│   ├── package.json
+│   ├── config.json              # MongoDB connection configuration (local)
+│   └── .env                     # JWT secret (local; do not commit)
+└── frontend/
+    └── notes-app/
+        ├── src/
+        │   ├── components/      # Navbar, cards, inputs, search, toasts
+        │   ├── pages/
+        │   │   ├── Home/        # Dashboard and add/edit note modal
+        │   │   ├── Login/
+        │   │   └── SignUp/
+        │   ├── utils/           # Axios client, constants, helpers
+        │   └── App.jsx         # Application routes
+        ├── package.json
+        └── vite.config.js
 ```
-cd existing_repo
-git remote add origin https://git.infotech.monash.edu/mern-learning-spike/mern-basics.git
-git branch -M main
-git push -uf origin main
+
+> `node_modules`, `.git`, and operating-system files have been omitted from the tree for clarity.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js and npm (use a version compatible with the Vite version in `frontend/notes-app/package.json`)
+- A running MongoDB instance or a MongoDB Atlas connection string
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/brandonsch0521-GH/MERN-Note-Taking-Project.git
+cd MERN-Note-Taking-Project
 ```
 
-## Integrate with your tools
+> The source archive uses `mern-basics/` as its top-level directory. Use the directory containing `Backend/` and `frontend/` if your checkout is named differently.
 
-* [Set up project integrations](https://git.infotech.monash.edu/mern-learning-spike/mern-basics/-/settings/integrations)
+### 2. Configure and start the backend
 
-## Collaborate with your team
+```bash
+cd Backend
+npm install
+```
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+Create `Backend/config.json`:
 
-## Test and Deploy
+```json
+{
+  "connectionString": "mongodb://127.0.0.1:27017/notes-app"
+}
+```
 
-Use the built-in continuous integration in GitLab.
+For MongoDB Atlas, replace the local URI with your own connection string. Do not commit real connection credentials.
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+Create `Backend/.env`:
 
-***
+```dotenv
+ACCESS_TOKEN_SECRET=replace-with-a-long-random-secret
+```
 
-# Editing this README
+Start the backend:
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```bash
+npm start
+```
 
-## Suggestions for a good README
+The Express server listens on **http://localhost:8000**. The `/` route returns a simple JSON response.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+### 3. Configure and start the frontend
 
-## Name
-Choose a self-explaining name for your project.
+Open a second terminal from the repository root:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+```bash
+cd frontend/notes-app
+npm install
+npm run dev
+```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Open the URL printed by Vite (typically `http://localhost:5173`). Navigate to `/signup` to create an account or `/login` to sign in. The authenticated dashboard is at `/dashboard`.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+The frontend API base URL is currently set to `http://localhost:8000` in `frontend/notes-app/src/utils/constants.js`. Update it if your backend runs elsewhere.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## Using the App
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+1. **Sign up** with a name, email address, and password, or log in with an existing account.
+2. **Create a note** using the add button on the dashboard, entering its title, content, and optional tags.
+3. **Manage notes** from note cards: edit, delete, or toggle the pinned state.
+4. **Find notes** through the search bar, which matches note titles and content.
+5. **Log out** through the navigation interface when finished.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+## API Endpoints
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+| Method | Endpoint | Purpose | Authentication |
+| --- | --- | --- | --- |
+| `GET` | `/` | Basic server response | No |
+| `POST` | `/create-account` | Register a user | No |
+| `POST` | `/login` | Log in and receive a JWT | No |
+| `GET` | `/get-user` | Get signed-in user information | Yes |
+| `POST` | `/add-note` | Create a note | Yes |
+| `PUT` | `/edit-note/:noteId` | Update a note | Yes |
+| `GET` | `/get-all-notes` | Get the user's notes | Yes |
+| `DELETE` | `/delete-note/:noteId` | Delete a note | Yes |
+| `PUT` | `/update-note-pinned/:noteId` | Update pinned status | Yes |
+| `GET` | `/search-notes?query=...` | Search notes | Yes |
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Protected endpoints expect a JWT in the header:
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```http
+Authorization: Bearer <access-token>
+```
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### Example: Create a Note
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+```http
+POST /add-note
+Authorization: Bearer <access-token>
+Content-Type: application/json
 
-## License
-For open source projects, say how it is licensed.
+{
+  "title": "Meeting Notes",
+  "content": "Review project milestones.",
+  "tags": ["work", "meeting"]
+}
+```
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## Available Commands
+
+**Backend** (`Backend/`):
+
+```bash
+npm start        # Start the API using nodemon
+```
+
+**Frontend** (`frontend/notes-app/`):
+
+```bash
+npm run dev      # Start Vite development server
+npm run build    # Build frontend for production
+npm run preview  # Preview the production build
+npm run lint     # Run ESLint
+```
+
+## Important Security Notes
+
+This is a learning project and **should not be deployed publicly as-is**.
+
+- **Passwords are currently stored in plaintext** in the user model and registration flow. Hash passwords using a suitable password-hashing library (for example, bcrypt or Argon2) and verify hashes at login before deploying.
+- The supplied source archive contains `Backend/.env` and `Backend/config.json`. Keep real secrets and database credentials out of public repositories, add these files to `.gitignore`, and **rotate any secrets that have already been committed or shared**.
+- Review token handling, input validation, error handling, and CORS settings before production use.
+- The frontend currently saves the JWT in browser `localStorage`; evaluate safer authentication/session patterns for production deployments.
+
+## Future Improvements
+
+- Hash user passwords and strengthen authentication security
+- Add automated frontend and backend tests
+- Introduce environment-driven API and database configuration
+- Improve form validation and API error handling
+- Add responsive layouts and accessibility improvements
+- Add deployment configuration and CI checks
+
+## Project Status
+
+A functional learning/demo implementation of a MERN note-taking application. Production hardening is still needed, particularly for credential handling and authentication security.
